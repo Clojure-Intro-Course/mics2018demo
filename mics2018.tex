@@ -3,7 +3,7 @@
 %
 % It is an example file showing how to use the 'acm_proc_article-sp.cls' V2.6SP
 % LaTeX2e document class file for Conference Proceedings submissions.
-% 
+%
 %----------------------------------------------------------------------------------------------------------------
 % This .tex file (and associated .cls V2.6SP) *DOES NOT* produce:
 %       1) The Permission Statement
@@ -31,7 +31,7 @@
 % Adrienne Griscti ---> griscti@acm.org
 %
 % Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
-% Gerald Murray ---> murray@acm.org 
+% Gerald Murray ---> murray@acm.org
 %
 % For tracking purposes - this is V2.6SP - OCTOBER 2002
 
@@ -45,7 +45,7 @@
 \setlength{\headsep}{0in}
 \setlength{\textwidth}{6in}
 \setlength{\textheight}{9in}
-\setlength{\parindent}{0in} 
+\setlength{\parindent}{0in}
 
 \usepackage{graphicx} %For jpg figure inclusion
 \usepackage{times} %For typeface
@@ -53,7 +53,7 @@
 \usepackage{color} %For Comments
 %\usepackage[all]{xy}
 \usepackage{float}
-%\usepackage{subfigure} 
+%\usepackage{subfigure}
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{parskip}
@@ -79,9 +79,9 @@
 %\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
 %\setpagenumber{50}
 %\CopyrightYear{2002} % Allows default copyright year (2002) to be
-%over-ridden - IF NEED BE. 
+%over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data
-%(X-XXXXX-XX-X/XX/XX) to be over-ridden. 
+%(X-XXXXX-XX-X/XX/XX) to be over-ridden.
 % --- End of Author Metadata ---
 
 \title{TBA}
@@ -118,13 +118,43 @@ shawx538@morris.umn.edu
 \setcounter{page}{1}
 
 \section{Introduction}
+Clojure, amongst other functional languages have gained attention in recent years
+in part for their management of state and concurrency.
+Clojure, which runs on the Java Virtual Machine (JVM) has a number of advantages for beginning students.
+Its Lisp style syntax and elegant core work let beginners learn easily, while
+its ties to the JVM keep it relevant as students progress into later courses.
+From the University of Minnesota Morriss's perspective, it has a significant flaw in the form of error messages.
+As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
+and so are confusing to new students. They can understand the source of the error,
+but not how the system presents it to them.
+For example, a user who accidentally called addition on an boolean needs
+ to understand classes, casting, and the classes involved to understand "java.lang.classCastException".
+ In contrast, a message that says "true cannot be added to 7" does not require additional knowledge from the user.
+ In order to overcome these problems,
+  we demonstrate an integration with commonly used tools in the Clojure community
+ to transform error messages into simplified forms before they are presented to the user.
+
 \cite{Hickey:2008}
 
+\section{Error Messages in Clojure}
+
+
+\section{Clojure, REPL and the IDE}
+Clojure is hosted and interpretted in the JVM, with Clojure code either being
+loaded by a Clojure process, or compiled Ahead Of Time into Java code.
+As Clojure loads code for exection, it reads in code as a string,
+and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
+is equivalent to running the code.
+As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
+process reads in data, evauluates it, and then prints the resulting value, waiting for the next user input before looping.
+
+
+\section{nREPL}
 
 \section{Acknowledgments}
 This work was supported in part by Morris Academic Partnership (MAP) stipend at UMM.
 
-	
+
 \bibliographystyle{acm}
 \bibliography{mics2018}
 
