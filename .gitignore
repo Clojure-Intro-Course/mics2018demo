@@ -1,0 +1,12 @@
+*.gz
+*.aux
+*.bbl
+*.log
+*.blg
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+mics2018.pdf
+mics2018talk.pdf
