@@ -121,14 +121,17 @@ shawx538@morris.umn.edu
 Clojure, amongst other functional languages have gained attention in recent years
 in part for their management of state and concurrency.
 Clojure, which runs on the Java Virtual Machine (JVM) has a number of advantages for beginning students.
-Its Lisp style syntax and elegant core work let beginners learn easily, while
+Its Lisp style syntax and elegant core work \emcomment{not sure what ``core work'' means}
+ let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
-From the University of Minnesota Morriss's perspective, it has a significant flaw in the form of error messages.
+From the University of Minnesota Morriss's perspective 
+\emcomment{This is not just UMM perspective, this is a general barrier in using it in a first programming class}, it has a significant flaw in the form of error messages.
 As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
 and so are confusing to new students. They can understand the source of the error,
 but not how the system presents it to them.
 For example, a user who accidentally called addition on an boolean needs
- to understand classes, casting, and the classes involved to understand "java.lang.classCastException".
+ to understand classes, casting, and the classes \emcomment{saying ``classes'' twice} involved to understand "java.lang.classCastException".
+\emcomment{The previous sentence is comnfusing; rephrase}
  In contrast, a message that says "true cannot be added to 7" does not require additional knowledge from the user.
  In order to overcome these problems,
   we demonstrate an integration with commonly used tools in the Clojure community
@@ -141,7 +144,7 @@ For example, a user who accidentally called addition on an boolean needs
 
 \section{Clojure, REPL and the IDE}
 Clojure is hosted and interpretted in the JVM, with Clojure code either being
-loaded by a Clojure process, or compiled Ahead Of Time into Java code.
+loaded by a Clojure process, or compiled Ahead Of Time \emcomment{not sure if it's a term; perhaps say ``ahead of loading''} into Java code.
 As Clojure loads code for exection, it reads in code as a string,
 and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
 is equivalent to running the code.
