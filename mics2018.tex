@@ -124,15 +124,17 @@ Clojure, which runs on the Java Virtual Machine (JVM) has a number of advantages
 Its Lisp style syntax and elegant core work \emcomment{not sure what ``core work'' means}
  let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
-From the University of Minnesota Morriss's perspective 
+From the University of Minnesota Morriss's perspective
 \emcomment{This is not just UMM perspective, this is a general barrier in using it in a first programming class}, it has a significant flaw in the form of error messages.
 As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
 and so are confusing to new students. They can understand the source of the error,
 but not how the system presents it to them.
-For example, a user who accidentally called addition on an boolean needs
- to understand classes, casting, and the classes \emcomment{saying ``classes'' twice} involved to understand "java.lang.classCastException".
-\emcomment{The previous sentence is comnfusing; rephrase}
- In contrast, a message that says "true cannot be added to 7" does not require additional knowledge from the user.
+For example, a user who accidentally called addition on a boolean needs
+ to understand the Java object hierarchy, casting,
+ and the classes involved to fully understand what is meant by
+ "java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number"
+Whereas the background required to understand "+ needs all arguments to be numbers, not true"
+ is significantly lower. \emcomment{is this a good rephrasing?}
  In order to overcome these problems,
   we demonstrate an integration with commonly used tools in the Clojure community
  to transform error messages into simplified forms before they are presented to the user.
@@ -140,19 +142,51 @@ For example, a user who accidentally called addition on an boolean needs
 \cite{Hickey:2008}
 
 \section{Error Messages in Clojure}
-
+Clojure is hosted and interpretted in the JVM, with Clojure code either being
+loaded by a Clojure process, or compiled Ahead Of Time(AOT compilation) into Java code.
+Either way, while Clojure is being run, it is essentially a Java program, consisting of
+Clojure classes written in Java carrying out their programming.
+To the programmer, as much as possible, their code stays within Clojure,
+the Java foundation thoroughly abstracted away.
+This allows Clojure to be a language, and not a library, but it means
+ that when an exception is thrown, it's thrown from under Clojure's abstractions
+ and so contains a great deal of information about the state of Clojure itself
+ during the error, and less information for the programmer.
+ For a novice programmer, the error message is confusingly laced
+  with Java terms and ideas, and the advanced features of Java that Clojure uses.
 
 \section{Clojure, REPL and the IDE}
-Clojure is hosted and interpretted in the JVM, with Clojure code either being
-loaded by a Clojure process, or compiled Ahead Of Time \emcomment{not sure if it's a term; perhaps say ``ahead of loading''} into Java code.
+
+
 As Clojure loads code for exection, it reads in code as a string,
 and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
 is equivalent to running the code.
 As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
-process reads in data, evauluates it, and then prints the resulting value, waiting for the next user input before looping.
+process reads in data, evauluates it, and then prints the resulting value,
+ waiting for the next user input before looping.
+This system lets a user experiment with code as it is written,
+ evualauting sub-expressions and building up complex functions.
+Many Clojure IDEs offer a way to interact with a REPL as part of their services,
+ and REPL driven development is a common pattern in the Clojure community.
+ As the REPL spans both evualauting code and presenting the results of evauluation to users,
+ the REPL is a logical place for our transformation of error messages to be implemented.
+ To maximize the adaptability of our code, implementing a custom REPL limits intgration
+ options with IDEs, and with users workflow in general.
+  Finding an expandable REPL implementation to add our message processing to
+  is ideal.
 
 
 \section{nREPL}
+nREPL is a community standard implementation of the REPL concept,
+allowing easy creation, connection and management of REPL servers.
+It is integrated with Leiningen, a commonly used project and dependency manager,
+ and with many IDES. Moreover, it includes the ability to add custom middleware,
+  changing the way the server reads and reacts to code.
+ nREPL communicates between its client and server by means of messages.
+ By intercepting messages from the server containing error messages,
+ we can replace the Java errors with our errors,
+  without the user experience changing inadvertently.
+
 
 \section{Acknowledgments}
 This work was supported in part by Morris Academic Partnership (MAP) stipend at UMM.
