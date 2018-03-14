@@ -121,11 +121,10 @@ shawx538@morris.umn.edu
 Clojure, amongst other functional languages have gained attention in recent years
 in part for their management of state and concurrency.
 Clojure, which runs on the Java Virtual Machine (JVM) has a number of advantages for beginning students.
-Its Lisp style syntax and elegant core work \emcomment{not sure what ``core work'' means}
- let beginners learn easily, while
+Its Lisp style syntax and elegant core library
+ work together to let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
-From the University of Minnesota Morriss's perspective
-\emcomment{This is not just UMM perspective, this is a general barrier in using it in a first programming class}, it has a significant flaw in the form of error messages.
+From an educational perspective, it has a significant flaw in the form of error messages.
 As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
 and so are confusing to new students. They can understand the source of the error,
 but not how the system presents it to them.
@@ -200,6 +199,17 @@ It is integrated with Leiningen, a commonly used project and dependency manager,
   without the user experience changing inadvertently.
   Keeping the middleware to only manipulating error messages
   is preffered, so as not cause side effects that would perplex the user.
+
+\section{Conclusion}
+By harnessing the systems already built for Clojure,
+such as Spec and nREPL, we gain needed information.
+By intercepting the display of error messages, we avoid changing users
+interactions with the REPL in hidden ways, and allow our code to
+be smoothly integrated into other tools as a user added nREPL middleware.
+  This alleviates the problems that prevent Clojures
+ adoption as a first programming language, and allow it's strengths
+ and ties to the Java ecosystem to keep it relevant as the student's skills increase.
+ 
 
 
 
