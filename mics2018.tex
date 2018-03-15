@@ -256,17 +256,34 @@ by a popular, expandable REPL implementation.
 %  Finding an expandable REPL implementation to add our message processing to
 %  is ideal.
 \section{nREPL}
-nREPL is a community standard implementation of the REPL concept,
-allowing easy creation, connection and management of REPL servers.
-It is integrated with Leiningen, a commonly used project and dependency manager,
- and with many IDES. Moreover, it includes the ability to add custom middleware,
-  changing the way the server reads and reacts to code.
- nREPL communicates between its client and server by means of messages.
- By intercepting messages from the server containing error messages,
- we can replace the Java errors with our errors,
-  without the user experience changing inadvertently.
-This should hold true even for REPLs in integrated into IDEs, as long as they
- use nREPL as a base.
+nREPL is a community standard implemententation of the REPL concept,
+ using a Client/Server model. It is integrated in Leiningen
+  (A project management system common in the Clojure community) as a client and server.
+ Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse, amongst others.
+It works by passing messages from the client, to be executed on the server.
+nREPL allows a set middleware to modify messages, providing utiltities
+like interuptible evaluations or independent user sessions.
+Custom middleware can be added, such as ours can be added by simply
+modifying a projects configuration file. Once our code is added,
+it listens for messages coming back from the server
+marked to be displayed to the users as errors.
+it customizes the error messages, and then reinserts them into the middleware stack
+to reach the user. As it is using the same message propogation scheme as an unmodified nREPL,
+IDEs should pick up and display the new error messages with little trouble.
+This also does not change or affect anything on the server side, so there should
+be no side effects.
+
+%nREPL is a community standard implementation of the REPL concept,
+%allowing easy creation, connection and management of REPL servers.
+%It is integrated with Leiningen, a commonly used project and dependency manager,
+% and with many IDES. Moreover, it includes the ability to add custom middleware,
+%  changing the way the server reads and reacts to code.
+% nREPL communicates between its client and server by means of messages.
+% By intercepting messages from the server containing error messages,
+% we can replace the Java errors with our errors,
+%  without the user experience changing inadvertently.
+%This should hold true even for REPLs in integrated into IDEs, as long as they
+% use nREPL as a base.
 
 \section{Conclusion}
 By harnessing the systems already built for Clojure,
