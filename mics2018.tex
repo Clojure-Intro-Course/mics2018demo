@@ -166,11 +166,11 @@ and Clojure objects are referred to only as Java classes that implement them}
   information useful in debugging, such as actual values involved in some erroring function calls.
 
 \section{Clojure Spec}
-Clojure Spec is a library within Clojure allowing runtrime validation
+Clojure Spec is a library within Clojure allowing runtime validation
 of the structure of data within the application, with flexibility and precision.
 As it can be used to validate arguments to functions, by providing Spec
  specifications for the Clojure core functions, we can gain Spec errors
- for misapplied fuctions. the data Spec error messages contain lets us build
+ for misapplied functions. the data Spec error messages contain lets us build
  error messages with better understanding of the errror that caused them. 
 As novice programmers would not use external libraries,
  all functions that they can access would hold Spec specifications.
@@ -180,51 +180,63 @@ rare for them to use functions beyond Clojure core.}
 \emcomment{Note that this only provides errors for function parameters 
 type errors; syntax errors cannot be handled via Spec.}
 \emcomment{Also mention here or elsewhere that the research group at UMM has been 
-working on providing error messages rewrite system, and the final piece to figure
+working on providing error messages rewriting system, and the final piece to figure
 out is how to integrate it with Clojure ecosystem.}
 
 
 \section{Clojure, REPL and the IDE}
-As Clojure loads code for exection, it reads in code as a string,
-and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
+\emcomment{Add a citation when you first mention spec - see bibliography, it has one}
+As Clojure loads code for execution, it reads in code as a string,
+and then parses it. As Clojure is homoiconic, fully evaluating all values in the data structure
 is equivalent to running the code.
-As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
-process reads in data, evauluates it, and then prints the resulting value,
+As such, a common system in Clojure is the Read-Eval-Print-Loop (REPL), whereby a running Clojure
+process reads in data, evaluates it, and then prints the resulting value,
  waiting for the next user input before looping.
 This system lets a user experiment with code as it is written,
- evualauting sub-expressions and building up complex functions.
+ evaluating sub-expressions and building up complex functions.
 Many Clojure IDEs offer a way to interact with a REPL as part of their services,
  and REPL driven development is a common pattern in the Clojure community.
- As the REPL spans both evualauting code and presenting the results of evauluation to users,
+ As the REPL spans both evaluating code and presenting the results of evaluation to users,
  the REPL is a logical place for our transformation of error messages to be implemented.
- To maximize the adaptability of our code, implementing a custom REPL limits intgration
+ To maximize the adaptability of our code, implementing a custom REPL limits integration
  options with IDEs, and with users workflow in general.
   Finding an expandable REPL implementation to add our message processing to
-  is ideal.
+  is ideal. \emcomment{would be ideal, and that was the goal of our project}
 
 
 \section{nREPL}
+\emcomment{Add a citation when you first mention nREPL - use Spec citation as a sample}
 nREPL is a community standard implementation of the REPL concept,
 allowing easy creation, connection and management of REPL servers.
 It is integrated with Leiningen, a commonly used project and dependency manager,
- and with many IDES. Moreover, it includes the ability to add custom middleware,
+ and with many IDEs. Moreover, it includes the ability to add custom middleware,
   changing the way the server reads and reacts to code.
  nREPL communicates between its client and server by means of messages.
  By intercepting messages from the server containing error messages,
  we can replace the Java errors with our errors,
   without the user experience changing inadvertently.
+\emcomment{Mention that in this case whether the user interacts with a REPL directly or via an IDE,
+the error messages would be replaced by the middleware in exactly the same way, providing consistent 
+user experience.}
   Keeping the middleware to only manipulating error messages
-  is preffered, so as not cause side effects that would perplex the user.
+  is preferred, so as not cause side effects that would perplex the user.
 
 \section{Conclusion}
 By harnessing the systems already built for Clojure,
 such as Spec and nREPL, we gain needed information.
+\emcomment{again, keep in mind that spec only checks function calls. If code is broken 
+in a way that it never reaches a call (for instance, it has a syntax error), Spec is not helpful. 
+Our system of replacing error messages handles both cases; you just have to be careful 
+when you are describing it to not give an impression that it's only Spec that's used.}
 By intercepting the display of error messages, we avoid changing users
 interactions with the REPL in hidden ways, and allow our code to
 be smoothly integrated into other tools as a user added nREPL middleware.
   This alleviates the problems that prevent Clojures
- adoption as a first programming language, and allow it's strengths
+ adoption as a first programming language, and allow its strengths
  and ties to the Java ecosystem to keep it relevant as the student's skills increase.
+\emcomment{This provides the final element for building a system that would allow....}
+\emcomment{We should tone it down because Spec-based errors are basically just a proof of concept,
+and your demo would also be a proof of concept, rather than a completely fleshed out system - mention the term ``proof of concept'' somewhere.}
  
 
 
