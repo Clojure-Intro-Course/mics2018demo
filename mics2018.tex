@@ -181,7 +181,7 @@ can be part of processing down the error for begginers.
 %  information useful in debugging, such as actual values involved in some erroring function calls.
 
 \section{Clojure Spec}
-A second piece of the information required can be sourced from Clojure Spec,
+A second piece of the information required can be sourced from Clojure Spec\comment{cite},
 which is a library within Clojure, dealing with runtime validation of
 the structure of data within a program. These specifications can be applied to
  the arguments of function calls, allowing erroneus function calls to have
@@ -256,10 +256,10 @@ by a popular, expandable REPL implementation.
 %  Finding an expandable REPL implementation to add our message processing to
 %  is ideal.
 \section{nREPL}
-nREPL is a community standard implemententation of the REPL concept,
+nREPL\comment{cite} is a community standard implemententation of the REPL concept,
  using a Client/Server model. It is integrated in Leiningen
   (A project management system common in the Clojure community) as a client and server.
- Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse, amongst others.
+ Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse\comment{cite}, amongst others.
 It works by passing messages from the client, to be executed on the server.
 nREPL allows a set middleware to modify messages, providing utiltities
 like interuptible evaluations or independent user sessions.
@@ -286,21 +286,30 @@ be no side effects.
 % use nREPL as a base.
 
 \section{Conclusion}
-By harnessing the systems already built for Clojure,
-such as Spec and nREPL, we gain needed information.
-\emcomment{again, keep in mind that spec only checks function calls. If code is broken
-in a way that it never reaches a call (for instance, it has a syntax error), Spec is not helpful.
-Our system of replacing error messages handles both cases; you just have to be careful
-when you are describing it to not give an impression that it's only Spec that's used.}
-By intercepting the display of error messages, we avoid changing users
-interactions with the REPL in hidden ways, and allow our code to
-be smoothly integrated into other tools as a user added nREPL middleware.
-  This alleviates the problems that prevent Clojures
- adoption as a first programming language, and allow it's strengths
- and ties to the Java ecosystem to keep it relevant as the student's skills increase.
-\emcomment{This provides the final element for building a system that would allow....}
-\emcomment{We should tone it down because Spec-based errors are basically just a proof of concept,
-and your demo would also be a proof of concept, rather than a completely fleshed out system - mention the term ``proof of concept'' somewhere.}
+Between Clojure default error messages, and Clojure Spec errors
+we have all the information we need to modify error messages, using the
+tools created by prior works by the University of Minnesota Morris research group. \comment{cite}
+Using nREPL middleware lets us place our code seamlessly into the users
+workflow, in a way that would not violate the expectations of more advanced users.
+ Taken together our system shows a proof of concept for how Clojure
+error messages can be modified for beginners, and allow Clojure to fulfill
+its promise as an educational language for first time programmers.
+
+%By harnessing the systems already built for Clojure,
+%such as Spec and nREPL, we gain needed information.
+%\emcomment{again, keep in mind that spec only checks function calls. If code is broken
+%in a way that it never reaches a call (for instance, it has a syntax error), Spec is not helpful.
+%Our system of replacing error messages handles both cases; you just have to be careful
+%when you are describing it to not give an impression that it's only Spec that's used.}
+%By intercepting the display of error messages, we avoid changing users
+%interactions with the REPL in hidden ways, and allow our code to
+%be smoothly integrated into other tools as a user added nREPL middleware.
+%  This alleviates the problems that prevent Clojures
+% adoption as a first programming language, and allow it's strengths
+% and ties to the Java ecosystem to keep it relevant as the student's skills increase.
+%\emcomment{This provides the final element for building a system that would allow....}
+%\emcomment{We should tone it down because Spec-based errors are basically just a proof of concept,
+%and your demo would also be a proof of concept, rather than a completely fleshed out system - mention the term ``proof of concept'' somewhere.}
 
 
 
