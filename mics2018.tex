@@ -157,7 +157,7 @@ What information regarding the error that remains unobscured is still
 phrased as a Java error, forcing a Clojure user into learning
 the underlying Java code. This undue onus on the beginner,
 unfamiliar with programming in general is unreasonable.
-However, the large amounts of information in a Clojure error,
+However, the large amounts of information in a Clojure error
 can be part of processing down the error for begginers.
 
 %Clojure is hosted and interpretted in the JVM, with Clojure code either being
@@ -218,24 +218,43 @@ information to leverage the tools built by the
 
 
 \section{Clojure, REPL and the IDE}
-As Clojure loads code for exection, it reads in code as a string,
-and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
-is equivalent to running the code.
-As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
-process reads in data, evauluates it, and then prints the resulting value,
- waiting for the next user input before looping.
-This system lets a user experiment with code as it is written,
- evualauting sub-expressions and building up complex functions.
-Many Clojure IDEs offer a way to interact with a REPL as part of their services,
- and REPL driven development is a common pattern in the Clojure community.
- As the REPL spans both evualauting code and presenting the results of evauluation to users,
- the REPL is a logical place for our transformation of error messages to be implemented.
- To maximize the adaptability of our code, implementing a custom REPL limits intgration
- options with IDEs, and with users workflow in general.
-  Finding an expandable REPL implementation to add our message processing to
-  is ideal.
+Clojure is homoiconic, meaning that a Clojure program is also
+vievable as a Clojure datastructure. Evaluating every values in that structure is
+equivalent to running the program.
+This in part allows a Clojure process to read in data, process it as a program
+and display the results back to the programmer and awaiting the next input.
+ This common pattern is refered to
+as the Read-Eval-Print-Loop (REPL), and programmers use it to test and build up
+individual parts of their programs functions. This pattern of development is
+referred to as REPL-Driven and is frequently used in Clojure community.
+\comment{can I say ''practically all'' here?}
+ Most Clojure Intgerated Development Environments (IDEs) feature REPLs for
+ user convenience. Outside of developer experimentation, the REPL mechanism is also used
+by the Clojure process to load in new Clojure code for execution in a running program,
+omitting the Print step as neccesary.
+Spanning both evaluation of code, and the preparation of output back to the user,
+the REPL is the prime location for our system to be implemented.
+However, building our own custom REPL is not advisable, as it limits the
+integration possibilities, needing IDEs to be customized to support it.
+Instead, the ideal position for our code is within an module loaded
+by a popular, expandable REPL implementation.
 
-
+%As Clojure loads code for exection, it reads in code as a string,
+%and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
+%is equivalent to running the code.
+%As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
+%process reads in data, evauluates it, and then prints the resulting value,
+% waiting for the next user input before looping.
+%This system lets a user experiment with code as it is written,
+% evaluating sub-expressions and building up complex functions.
+%Many Clojure IDEs offer a way to interact with a REPL as part of their services,
+% and REPL driven development is a common pattern in the Clojure community.
+% As the REPL spans both evaluating code and presenting the results of evaluation to users,
+% the REPL is a logical place for our transformation of error messages to be implemented.
+% To maximize the adaptability of our code, implementing a custom REPL limits integration
+% options with IDEs, and with user's workflow in general.
+%  Finding an expandable REPL implementation to add our message processing to
+%  is ideal.
 \section{nREPL}
 nREPL is a community standard implementation of the REPL concept,
 allowing easy creation, connection and management of REPL servers.
@@ -246,11 +265,8 @@ It is integrated with Leiningen, a commonly used project and dependency manager,
  By intercepting messages from the server containing error messages,
  we can replace the Java errors with our errors,
   without the user experience changing inadvertently.
-\emcomment{Mention that in this case whether the user interacts with a REPL directly or via an IDE,
-the error messages would be replaced by the middleware in exactly the same way, providing consistent
-user experience.}
-  Keeping the middleware to only manipulating error messages
-  is preffered, so as not cause side effects that would perplex the user.
+This should hold true even for REPLs in integrated into IDEs, as long as they
+ use nREPL as a base.
 
 \section{Conclusion}
 By harnessing the systems already built for Clojure,
