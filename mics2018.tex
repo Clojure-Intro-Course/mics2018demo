@@ -118,14 +118,14 @@ shawx538@morris.umn.edu
 \setcounter{page}{1}
 
 \section{Introduction}
-Clojure~\cite{Hickey:2008}, amongst other functional languages \emcomment{comma?} have gained attention in recent years
-in part for their \emcomment{its (or change the sentence structure if you want to talk about all functional languages)} management of state and concurrency.
-Clojure, which runs on the Java Virtual Machine (JVM) has a number of advantages for beginning students.
+Clojure~\cite{Hickey:2008}, amongst other functional languages, have gained attention in recent years
+in part for its management of state and concurrency.
+Runing on the Java Virtual Machine (JVM), Clojure has a number of advantages for beginning students.
 Its Lisp style syntax and elegant core library
  work together to let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
 
-\emcomment{However,} From an educational perspective, it has a significant flaw in the form of error messages.
+However, from an educational perspective, it has a significant flaw in the form of error messages.
 As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
 and so are confusing to new students. They can understand the source of the error,
 but not how the system presents it to them.
@@ -133,111 +133,132 @@ For example, a user who accidentally called addition on a boolean needs
  to understand the Java object hierarchy, casting,
  and the classes involved to fully understand what is meant by
  ``java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number'',
-whereas the background required to understand ``+ needs all arguments to be numbers, not true''
- is significantly lower. \comment{is this a good rephrasing?} \emcomment{well, this is not our actual error in this situation. The actual error is:
-``In function + the first argument true must be a number, but is a boolean''} 
+whereas the background required to understand ``In function + the first argument true must be a number, but is a boolean''
+ is significantly lower.
  In order to overcome these problems,
-  we demonstrate an integration with commonly used tools in the Clojure community
- to transform error messages into simplified forms before they are presented to the user.
-\emcomment{we have explored possibilities for integrating custom-made error messages with commonly used tools in the Clojure community}
+ we have explored possibilities for integrating customized error messages with commonly used tools in the Clojure community.
+%  we demonstrate a proof of concept integration with commonly used tools in the Clojure community
+% to transform error messages into simplified forms before they are presented to the user.
+%\emcomment{we have explored possibilities for integrating custom-made error messages with commonly used tools in the Clojure community}
 
 
 
 
 \section{Error Messages in Clojure}
-Clojure is hosted and interpretted in the JVM, with Clojure code either being
-loaded by a Clojure process, or compiled Ahead Of Time (AOT compilation) into Java code.
-Either way, while Clojure is being run, it is essentially a Java program, consisting of
-Clojure classes written in Java carrying out their programming. 
-\emcomment{hmmm, I am not sure what this (previous) sentence means}
-To the programmer, as much as possible, their code stays within Clojure,
-the Java foundation thoroughly abstracted away.
-\emcomment{Also could be phrased better}
-This allows Clojure to act as a language, and not a library, but it means
- that when an exception is thrown, it's thrown from under Clojure's abstractions
- and so contains a great deal of information about the state of Clojure itself
- during the error, and less information relating to what exactly went wrong in the
- programmers own code.
-\emcomment{Perhaps the key here is that the JVM doesn't perceives the code as Java, and thus just throws a Java exception,
-and Clojure objects are referred to only as Java classes that implement them}
- For a novice programmer, the error message is confusingly laced
-  with Java terms and ideas, and the advanced features of Java that Clojure uses.
-  Furthermore, as the error message is from a Java standpoint, it often misses
-  information useful in debugging, such as actual values involved in some erroring function calls.
+Clojure is hosted and interpretted in the JVM, as a Java program.
+Clojure code can either be loaded by a running Clojure process, or
+compiled Ahead Of Time (AOT compilation) into Java bytecode. In either case,
+even simple Clojure code mid execution is a very complex Java program,
+and any exceptions thrown are thrown as Java errors.
+From the viewpoint of the JVM, the entirety of the Clojure process is
+part of the users program, and so error messages include large amounts
+of data about the underlying state of the Java classes that implement Clojure.
+What information regarding the error that remains unobscured is still
+phrased as a Java error, forcing a Clojure user into learning
+the underlying Java code. This undue onus on the beginner,
+unfamiliar with programming in general is unreasonable.
+However, the large amounts of information in a Clojure error,
+can be part of processing down the error for begginers.
+
+%Clojure is hosted and interpretted in the JVM, with Clojure code either being
+%loaded by a Clojure process, or compiled Ahead Of Time (AOT compilation) into Java code.
+%Either way, while Clojure is being run, it is essentially a Java program, consisting of
+%Clojure classes written in Java carrying out their programming.
+%\emcomment{hmmm, I am not sure what this (previous) sentence means}
+%To the programmer, as much as possible, their code stays within Clojure,
+%the Java foundation thoroughly abstracted away.
+%\emcomment{Also could be phrased better}
+%This allows Clojure to act as a language, and not a library, but it means
+% that when an exception is thrown, it's thrown from under Clojure's abstractions
+% and so contains a great deal of information about the state of Clojure itself
+% during the error, and less information relating to what exactly went wrong in the
+% programmers own code.
+%\emcomment{Perhaps the key here is that the JVM doesn't perceives the code as Java, and thus just throws a Java exception,
+%and Clojure objects are referred to only as Java classes that implement them}
+% For a novice programmer, the error message is confusingly laced
+%  with Java terms and ideas, and the advanced features of Java that Clojure uses.
+%  Furthermore, as the error message is from a Java standpoint, it often misses
+%  information useful in debugging, such as actual values involved in some erroring function calls.
 
 \section{Clojure Spec}
-Clojure Spec is a library within Clojure allowing runtime validation
-of the structure of data within the application, with flexibility and precision.
-As it can be used to validate arguments to functions, by providing Spec
- specifications for the Clojure core functions, we can gain Spec errors
- for misapplied functions. the data Spec error messages contain lets us build
- error messages with better understanding of the errror that caused them. 
-As novice programmers would not use external libraries,
- all functions that they can access would hold Spec specifications.
-\emcomment{If Spec validation is provided for all Clojure core functions, 
-this would likely be sufficient for novice programmers since it would be 
-rare for them to use functions beyond Clojure core.} 
-\emcomment{Note that this only provides errors for function parameters 
-type errors; syntax errors cannot be handled via Spec.}
-\emcomment{Also mention here or elsewhere that the research group at UMM has been 
-working on providing error messages rewriting system, and the final piece to figure
-out is how to integrate it with Clojure ecosystem.}
+A second piece of the information required can be sourced from Clojure Spec,
+which is a library within Clojure, dealing with runtime validation of
+the structure of data within a program. These specifications can be applied to
+ the arguments of function calls, allowing erroneus function calls to have
+ error messages that explain how the invocation did not meet the usage pattern
+ needed. By providing Spec specifications for the Core library of Clojure,
+ we can cover every function that a novice will be able to call, and thus catch
+ any miscalled functions with detialed spec error messages.
+ This information can be captured by our system, and as a result
+ let us access information such as the actual values that caused the errors.
+Note that Spec only provides errors for function parameters, syntax errors or
+runtime exceptions, we need to source our data from the original Java error messages.
+Between Spec error messgages and the original Java error messages, we have enough
+information to leverage the tools built by the
+ University of Minnesota Morris research group, as soon we can integrate
+ our process with the larger Clojure ecosystem.
+
+
+%Clojure Spec is a library within Clojure allowing runtrime validation
+%of the structure of data within the application, with flexibility and precision.
+%As it can be used to validate arguments to functions, by providing Spec
+% specifications for the Clojure core functions, we can gain Spec errors
+% for misapplied fuctions. the data Spec error messages contain lets us build
+% error messages with better understanding of the errror that caused them.
+%As novice programmers would not use external libraries,
+% all functions that they can access would hold Spec specifications.
+%\emcomment{If Spec validation is provided for all Clojure core functions,
+%this would likely be sufficient for novice programmers since it would be
+%rare for them to use functions beyond Clojure core.}
+%\emcomment{Note that this only provides errors for function parameters
+%type errors; syntax errors cannot be handled via Spec.}
+%\emcomment{Also mention here or elsewhere that the research group at UMM has been
+%working on providing error messages rewrite system, and the final piece to figure
+%out is how to integrate it with Clojure ecosystem.}
 
 
 \section{Clojure, REPL and the IDE}
-\emcomment{Add a citation when you first mention spec - see bibliography, it has one}
-As Clojure loads code for execution, it reads in code as a string,
-and then parses it. As Clojure is homoiconic, fully evaluating all values in the data structure
+As Clojure loads code for exection, it reads in code as a string,
+and then parses it. As Clojure is homoiconic, fully evauluating all values in the datastructure
 is equivalent to running the code.
-As such, a common system in Clojure is the Read-Eval-Print-Loop (REPL), whereby a running Clojure
-process reads in data, evaluates it, and then prints the resulting value,
+As such, a common system in Clojure is the Read-Eval-Print-Loop, whereby a running Clojure
+process reads in data, evauluates it, and then prints the resulting value,
  waiting for the next user input before looping.
 This system lets a user experiment with code as it is written,
- evaluating sub-expressions and building up complex functions.
+ evualauting sub-expressions and building up complex functions.
 Many Clojure IDEs offer a way to interact with a REPL as part of their services,
  and REPL driven development is a common pattern in the Clojure community.
- As the REPL spans both evaluating code and presenting the results of evaluation to users,
+ As the REPL spans both evualauting code and presenting the results of evauluation to users,
  the REPL is a logical place for our transformation of error messages to be implemented.
- To maximize the adaptability of our code, implementing a custom REPL limits integration
+ To maximize the adaptability of our code, implementing a custom REPL limits intgration
  options with IDEs, and with users workflow in general.
   Finding an expandable REPL implementation to add our message processing to
-  is ideal. \emcomment{would be ideal, and that was the goal of our project}
+  is ideal.
 
 
 \section{nREPL}
-\emcomment{Add a citation when you first mention nREPL - use Spec citation as a sample}
 nREPL is a community standard implementation of the REPL concept,
 allowing easy creation, connection and management of REPL servers.
 It is integrated with Leiningen, a commonly used project and dependency manager,
- and with many IDEs. Moreover, it includes the ability to add custom middleware,
+ and with many IDES. Moreover, it includes the ability to add custom middleware,
   changing the way the server reads and reacts to code.
  nREPL communicates between its client and server by means of messages.
  By intercepting messages from the server containing error messages,
  we can replace the Java errors with our errors,
   without the user experience changing inadvertently.
-\emcomment{Mention that in this case whether the user interacts with a REPL directly or via an IDE,
-the error messages would be replaced by the middleware in exactly the same way, providing consistent 
-user experience.}
   Keeping the middleware to only manipulating error messages
-  is preferred, so as not cause side effects that would perplex the user.
+  is preffered, so as not cause side effects that would perplex the user.
 
 \section{Conclusion}
 By harnessing the systems already built for Clojure,
 such as Spec and nREPL, we gain needed information.
-\emcomment{again, keep in mind that spec only checks function calls. If code is broken 
-in a way that it never reaches a call (for instance, it has a syntax error), Spec is not helpful. 
-Our system of replacing error messages handles both cases; you just have to be careful 
-when you are describing it to not give an impression that it's only Spec that's used.}
 By intercepting the display of error messages, we avoid changing users
 interactions with the REPL in hidden ways, and allow our code to
 be smoothly integrated into other tools as a user added nREPL middleware.
   This alleviates the problems that prevent Clojures
- adoption as a first programming language, and allow its strengths
+ adoption as a first programming language, and allow it's strengths
  and ties to the Java ecosystem to keep it relevant as the student's skills increase.
-\emcomment{This provides the final element for building a system that would allow....}
-\emcomment{We should tone it down because Spec-based errors are basically just a proof of concept,
-and your demo would also be a proof of concept, rather than a completely fleshed out system - mention the term ``proof of concept'' somewhere.}
- 
+
 
 
 
