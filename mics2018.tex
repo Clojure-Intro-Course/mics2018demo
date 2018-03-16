@@ -176,6 +176,7 @@ work easily.
 Clojure ecosystem or that they need Spec?}
 
 \section{Clojure Spec}
+%\emcomment{General comment here: either use "parameters" or "arguments", don't mix}
 A second piece of the information required can be sourced from Clojure Spec~\cite{spec}
 which is a recently added library within Clojure, dealing with runtime validation of
 the structure of data within a program. For example, a function dealing with
@@ -189,17 +190,17 @@ By providing Spec specifications for the Core library of Clojure,
  any miscalled functions with detailed Spec error messages.
  This information can be captured by our system, and as a result
  let us access information such as the actual values that caused the errors,
- a detail often ommitted by default Clojure errors.
-Note that Spec only provides errors for function parameters; for syntax errors or other kinds of
+ a detail often omitted by default Clojure errors.
+Note that Spec only provides errors for function arguments; for syntax errors or other kinds of
 runtime exceptions, we need to source our data from the original Java error messages.
 Between Spec error messages and the original Java error messages, we have enough
 information to leverage the tools built by the
- University of Minnesota Morris research group, as soon we can integrate
+ University of Minnesota Morris research group~\cite{mics2017}, as soon as we can integrate
  our process with the larger Clojure ecosystem.
 
 \section{Clojure, REPL and the IDE}
 Clojure is homoiconic, meaning that a Clojure program is also a Clojure datastructure.
- Evaluating every values in that structure is
+ Evaluating every value in that structure is
 equivalent to running the program.
 This in part allows a Clojure process to read in data, process it as a program, display the results
  back to the programmer, and keep running, awaiting the next input.
@@ -212,7 +213,7 @@ referred to as REPL-Driven and is frequently used in Clojure community.
  Most Clojure Integrated Development Environments (IDEs) feature REPLs for
  user convenience. Outside of developer experimentation, the REPL mechanism is also used
 by the Clojure process to load in new Clojure code for execution in a running program,
-omitting the Print step as necessary.
+omitting the Print step if necessary.
 Spanning both evaluation of code, and the preparation of output back to the user,
 the REPL is the prime location for our system to be implemented.
 However, building our own custom REPL is not advisable, as it limits the
@@ -221,32 +222,39 @@ Instead, the ideal position for our code is within an module loaded
 by a popular, expandable REPL implementation.
 
 \section{nREPL}
-nREPL\comment{cite} is a community standard implementation of the REPL concept,
- using a Client/Server model. It is integrated in Leiningen
- (A project management system common in the Clojure community) as a client and server.
- Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse\comment{cite}, amongst others.
-It works by passing messages from the client, to be executed on the server.
-nREPL allows a set middleware to modify messages, providing utilities
+nREPL~\cite{nrepl} is a community standard implementation of the REPL concept,
+ using a
+\newline
+Client/Server model. It is integrated in Leiningen
+ (a project management system common in the Clojure community) as a client and server.
+ Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse,
+%\comment{cite}, 
+among others.
+nREPL works by passing messages from the client, to be executed on the server.
+It allows a set middleware to modify messages, providing utilities
 like interruptible evaluations or independent user sessions.
-Custom middleware can be added, such as ours can be added by simply
+Custom middleware can be added, such as ours, can be added by simply
 modifying a projects configuration file. Once our code is added,
 it listens for messages coming back from the server
 marked to be displayed to the users as errors.
-it customizes the error messages, and then reinserts them into the middleware stack
+It customizes the error messages, and then reinserts them into the middleware stack
 to reach the user. As it is using the same message propagation scheme as an unmodified nREPL,
 IDEs should pick up and display the new error messages with little trouble.
-This also does not change or affect anything on the server side, so there should
-be no side effects.
+This also does not change or affect anything on the server side, so there are no side effects.
 
 \section{Conclusion}
 Between Clojure default error messages, and Clojure Spec
 we have all the information we need to modify error messages, using the
-tools created by prior works by the University of Minnesota Morris research group. \comment{cite}
+tools created by prior works by the University of Minnesota Morris research group. %\comment{cite}
 Using nREPL middleware lets us place our code seamlessly into the users
 workflow, in a way that would not violate the expectations of more advanced users.
  Taken together our system shows a proof of concept for how Clojure
 error messages can be modified for beginners, and allow Clojure to fulfill
 its promise as an educational language for first time programmers.
+\emcomment{Instead of the last sentence: We demonstrate a proof of concept
+ for how Clojure
+error messages can be modified for beginners via nREPL. This is an essential step on the
+way of making Clojure an educational language for first time programmers.}
 
 \section{Acknowledgments}
 This work was supported in part by Morris Academic Partnership (MAP) stipend at UMM.
