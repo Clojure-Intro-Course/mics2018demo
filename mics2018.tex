@@ -1,4 +1,4 @@
-% This is sigproc-sp.tex -FILE FOR V2.6SP OF ACM_PROC_ARTICLE-SP.CLS
+ % This is sigproc-sp.tex -FILE FOR V2.6SP OF ACM_PROC_ARTICLE-SP.CLS
 % OCTOBER 2002
 %
 % It is an example file showing how to use the 'acm_proc_article-sp.cls' V2.6SP
@@ -6,12 +6,12 @@
 %
 %----------------------------------------------------------------------------------------------------------------
 % This .tex file (and associated .cls V2.6SP) *DOES NOT* produce:
-%       1) The Permission Statement
-%       2) The Conference (location) Info information
-%       3) The Copyright Line with ACM data
-%       4) Page numbering
+%     1) The Permission Statement
+%     2) The Conference (location) Info information
+%     3) The Copyright Line with ACM data
+%     4) Page numbering
 %
-%  However, both the CopyrightYear (default to 2002) and the ACM Copyright Data
+% However, both the CopyrightYear (default to 2002) and the ACM Copyright Data
 % (default to X-XXXXX-XX-X/XX/XX) can still be over-ridden by whatever the author
 % inserts into the source .tex file.
 % e.g.
@@ -24,7 +24,7 @@
 % is produced).
 % REMEMBER HOWEVER: After having produced the .bbl file,
 % and prior to final submission,
-% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% you need to 'insert' your .bbl file into your source .tex file so as to provide
 % ONE 'self-contained' source file.
 %
 % Questions regarding SIGS should be sent to
@@ -84,7 +84,7 @@
 %(X-XXXXX-XX-X/XX/XX) to be over-ridden.
 % --- End of Author Metadata ---
 
-\title{TBA}
+\title{Implementing Novice Friendly Error Messages in Clojure}
 %\subtitle{[Extended Abstract \comment{DO WE NEED THIS?}]
 %\titlenote{}}
 %
@@ -121,19 +121,17 @@ By using these messages, along with the information granted by Clojure.Spec cont
  by integrating the reformatting code into the Clojure communtity tool nREPL, the
  transformation can be accomplished without disturbing workflows, and be easily
  used in Integrated Development Environments. We present a proof of concept implemententation
- of beginner friendly error message transformations in Clojure.
+ of beginner friendly error messages in Clojure.
 
 \newpage
 \setcounter{page}{1}
 
 \section{Introduction}
-Clojure~\cite{Hickey:2008}, amongst other functional languages, have gained attention in recent years
+Clojure~\cite{Hickey:2008}, amongst other functional languages, has gained attention in recent years
 in part for its management of state and concurrency.
 Runing on the Java Virtual Machine (JVM), Clojure has a number of advantages for beginning students.
-Its Lisp style syntax and elegant core library
- work together to let beginners learn easily, while
+Its Lisp style syntax and elegant core library work together to let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
-
 However, from an educational perspective, it has a significant flaw in the form of error messages.
 As Clojure code runs in the JVM, its errors take the structure and terminology of Java error messages,
 and so are confusing to new students. They can understand the source of the error,
@@ -141,14 +139,17 @@ but not how the system presents it to them.
 For example, a user who accidentally called addition on a boolean needs
  to understand the Java object hierarchy, casting,
  and the classes involved to fully understand what is meant by
- ``java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number'',
-whereas the background required to understand ``In function + the first argument true must be a number, but is a boolean''
- is significantly lower.
+ ``java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number''
+Whereas the mental overhead required to understand
+``In function + the first argument true must be a number, but is a boolean''
+ is significantly lower, with the above closer to a plain language
+ description of the issue.
  In order to overcome these problems,
- we have explored possibilities for integrating customized error messages with commonly used tools in the Clojure community.
+ we have explored possibilities for integrating customized error messages
+ with commonly used tools in the Clojure community.
 
 \section{Error Messages in Clojure}
-Clojure is hosted and interpretted in the JVM, as a Java program.
+Clojure is hosted and interpreted in the JVM, as a Java program.
 Clojure code can either be loaded by a running Clojure process, or
 compiled Ahead Of Time (AOT compilation) into Java bytecode. In either case,
 even simple Clojure code mid execution is a very complex Java program,
@@ -164,14 +165,14 @@ However, the large amounts of information in a Clojure error
 can be part of processing down the error for begginers.
 
 \section{Clojure Spec}
-A second piece of the information required can be sourced from Clojure Spec\comment{cite},
+A second piece of the information required can be sourced from Clojure Spec \comment{cite this}
 which is a library within Clojure, dealing with runtime validation of
 the structure of data within a program. These specifications can be applied to
  the arguments of function calls, allowing erroneus function calls to have
  error messages that explain how the invocation did not meet the usage pattern
  needed. By providing Spec specifications for the Core library of Clojure,
  we can cover every function that a novice will be able to call, and thus catch
- any miscalled functions with detialed spec error messages.
+ any miscalled functions with detailed spec error messages.
  This information can be captured by our system, and as a result
  let us access information such as the actual values that caused the errors.
 Note that Spec only provides errors for function parameters, syntax errors or
@@ -182,8 +183,8 @@ information to leverage the tools built by the
  our process with the larger Clojure ecosystem.
 
 \section{Clojure, REPL and the IDE}
-Clojure is homoiconic, meaning that a Clojure program is also
-vievable as a Clojure datastructure. Evaluating every values in that structure is
+Clojure is homoiconic, meaning that a Clojure program is also a Clojure datastructure.
+ Evaluating every values in that structure is
 equivalent to running the program.
 This in part allows a Clojure process to read in data, process it as a program
 and display the results back to the programmer and awaiting the next input.
@@ -206,7 +207,7 @@ by a popular, expandable REPL implementation.
 \section{nREPL}
 nREPL\comment{cite} is a community standard implemententation of the REPL concept,
  using a Client/Server model. It is integrated in Leiningen
-  (A project management system common in the Clojure community) as a client and server.
+ (A project management system common in the Clojure community) as a client and server.
  Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse\comment{cite}, amongst others.
 It works by passing messages from the client, to be executed on the server.
 nREPL allows a set middleware to modify messages, providing utiltities
@@ -222,7 +223,7 @@ This also does not change or affect anything on the server side, so there should
 be no side effects.
 
 \section{Conclusion}
-Between Clojure default error messages, and Clojure Spec errors
+Between Clojure default error messages, and Clojure Spec
 we have all the information we need to modify error messages, using the
 tools created by prior works by the University of Minnesota Morris research group. \comment{cite}
 Using nREPL middleware lets us place our code seamlessly into the users
