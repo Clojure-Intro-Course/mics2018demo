@@ -120,17 +120,19 @@ which hides the details about the issue in the users code.
 By using these messages, along with the information obtained via Clojure.Spec contracts,
  error messages can be reformatted into a beginner friendly, near plain-language representation.
  By integrating the re-formatting code into Clojures nREPL middleware system, the
- transformation can be accomplished without disturbing programmers' workflows, and be easily
+ transformation can be accomplished without disturbing programmers' workflow, and be easily
  incorporated into Integrated Development Environments.
 We present a proof of concept implementation
-integrating beginner friendly error messages in into Clojure via nREPL.
+integrating beginner friendly error messages into Clojure via nREPL.
 
 \newpage
 \setcounter{page}{1}
 
 \section{Introduction}
 Clojure~\cite{Hickey:2008}, amongst other functional languages, has gained attention in recent years
-in part for its management of state and concurrency. \comment{is there something else I should call out as feature of Clojure?}
+in part for its management of state and concurrency. 
+%\comment{is there something else I should call out as feature of Clojure?}
+%\emcomment{For this write-up it's sufficient. For a full-scale paper you would need more details}
 Running on the Java Virtual Machine (JVM), Clojure has a number of advantages for beginning students.
 Its Lisp style syntax and elegant core library work together to let beginners learn easily, while
 its ties to the JVM keep it relevant as students progress into later courses.
@@ -147,38 +149,39 @@ whereas the mental overhead required to understand
  is significantly lower, with the latter being closer to a plain language
  description of the issue.
  In order to overcome these problems,
- we have explored possibilities for integrating costumized error messages
+ we have explored possibilities for integrating customized error messages
  with common tools in the Clojure programming community.
 
 \section{Error Messages in Clojure}
 Clojure is hosted and interpreted in the JVM, as a Java program.
 Clojure code can either be loaded by a running Clojure process, or
 compiled Ahead Of Time (AOT compilation) into Java bytecode. In either case,
-even simple Clojure code, mid-execution is in actuality, a complex Java program.
+even simple Clojure code mid-execution is in actuality a complex Java program.
 When that program encounters any error, including syntax errors, it is thrown as a Java exception.
 From the viewpoint of the JVM, the entirety of the Clojure process is
-part of the users program, and so error messages include large amounts
+a part of the users program, and so error messages include large amounts
 of data about the underlying state of the Java classes that implement Clojure.
-This surplus information outside can be useful in debugging,
+This surplus information can be useful in debugging,
 but whole message is still phrased from a Java perspective, requiring familiarity with Java
 to understand what is happening in Clojure.
 This undue onus on the beginner,
 unfamiliar with programming in general, is an unreasonable burden.
 However, the information present can be leveraged by us to make our improved
 error messages, though there is not enough information in them to rely on them entirely.
-A second source of information is prefered, and can be found within Clojure itself.
+A second source of information is preferred when possible, and can be found within Clojure itself,
+in the form of Clojure Spec contracts.
 
 \section{Clojure Spec}
 The second piece of the information required can be sourced from Clojure Spec~\cite{spec}
 which is a recently added library within Clojure, dealing with runtime validation of
 the structure of data within a program. These take the form of specifications, or contracts
-and can be applied to any datastructure, including the arguments supplied to a function.
- For example, a fucntion dealing with a list have have a spec contract enforcing that all arguments
+and can be applied to any data structure, including the arguments supplied to a function.
+ For example, a function dealing with a list have have a Spec contract enforcing that all arguments
  used as list indices are non-negative integers.
 Importantly, these contracts provide detailed information
  about how the actual values differ from those required.
 By providing Spec specifications for the Core library of Clojure,
- we can cover every function that a novice will be able to call, and thus catch
+ we can cover every function that a novice is able to call, and thus catch
  any miscalled functions with detailed Spec error messages.
  This information can be captured by our system, and as a result
  lets us access information such as the actual values that caused the exception,
@@ -187,19 +190,21 @@ Note that Spec only provides errors for function arguments; for syntax errors or
 runtime exceptions, we need to source our data from the original Java error messages.
 Between Spec error messages and the original Java error messages, we have enough
 information to leverage the tools built by the
- University of Minnesota Morris research group~\cite{mics2017}, as soon as we can integrate
- our process with the larger Clojure ecosystem.
- \comment{Need to work out a transition here}
+ University of Minnesota Morris research group~\cite{mics2017}. 
+However, up until now it was not clear how this system could be integrated with the larger Clojure ecosystem.
+%, as soon as we can integrate
+% our process with the larger Clojure ecosystem.
+% \comment{Need to work out a transition here}
 
 \section{Clojure, REPL and the IDE}
-Clojure is homoiconic, meaning that a Clojure program is also a Clojure datastructure.
+Clojure is homoiconic, meaning that a Clojure program is also a Clojure data structure.
  Evaluating every value in that structure is
 equivalent to running the program.
 This allows a Clojure process to read in data, process it as a program, display the results
  back to the programmer, and keep running, awaiting the next input.
- This common seqequence of steps is referred to
+ This common sequence of steps is referred to
 as the Read-Eval-Print-Loop (REPL). Programmers use it to interactively test and build up
-individual parts of their programs functions. This pattern of development is
+individual parts of their programs. This pattern of development is
 referred to as REPL-Driven and is commonly used in Clojure community.
  Most Clojure Integrated Development Environments (IDEs) feature REPLs for
  user convenience. Outside of developer experimentation, the REPL mechanism is also used
@@ -216,10 +221,13 @@ Instead, the ideal position for our code is within a module
 nREPL~\cite{nrepl} is a community standard implementation of the REPL concept,
  using a
 \newline
-Client/Server model. It is integrated in Leiningen
- (a project management system common in the Clojure community) as the default REPL.
- Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse,
-among others.
+Client/Server model. 
+%It is integrated in Leiningen
+% (a project management system common in the Clojure community) as the default REPL.
+% Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse,
+%among others.
+It is integrated into Clojure project management software, as well as most commonly used IDEs
+that support Clojure. 
 nREPL works by passing messages from the client, to be executed on the server, with the results
 being returned to the client for display.
 It allows a set of middleware to modify messages, providing utilities
@@ -236,18 +244,17 @@ This also does not change or affect anything on the server side, so there are no
 \section{Conclusion}
 Between Clojure default error messages, and Clojure Spec
 we have all the information needed to modify error messages, using the
-tools created by prior works of the University of Minnesota Morris research group. \cite{mics2017}
+tools created by prior works of the University of Minnesota Morris research group. %\cite{mics2017}
 Using nREPL middleware lets us place our code seamlessly into the beginners
 workflow, in a way that would not violate the expectations of more advanced users.
  Taken together our system shows a proof of concept for how Clojure
-error messages can be modified for beginners via nREPL, a neccesary first step in making
+error messages can be modified for beginners via nREPL, a necessary step in making
 Clojure an educational language for first time programmers.
 
 
 \section{Acknowledgments}
-This work was supported in part by Morris Academic Partnership (MAP) stipend at UMM.
-
-This work was conducted with the advice of Assistant Professor Elena Machkasova.
+The author thanks the project adviser  Elena Machkasova.
+The work was supported in part by Morris Academic Partnership (MAP) stipend at UMM.
 
 \bibliographystyle{acm}
 \bibliography{mics2018}
