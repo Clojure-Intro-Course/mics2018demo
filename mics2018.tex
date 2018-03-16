@@ -144,43 +144,52 @@ but not how the system presents it to them.
 For example, a user who accidentally called addition on a boolean needs
  to understand the Java object hierarchy, casting,
  and the classes involved to fully understand what is meant by
- ``java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number''
-Whereas the mental overhead required to understand
-``In function + the first argument true must be a number, but is a boolean''
- is significantly lower, with the above closer to a plain language
+ ``java.lang.classCastException java.lang.Boolean cannot be cast to java.lang.Number'',
+whereas the mental overhead required to understand
+``In function + the first argument {\tt true} must be a number, but is a boolean''
+ is significantly lower, with the latter being closer to a plain language
  description of the issue.
  In order to overcome these problems,
  we have explored possibilities for integrating customized error messages
- with commonly used tools in the Clojure community.
+ with commonly used tools in the Clojure programming community.
 
 \section{Error Messages in Clojure}
 Clojure is hosted and interpreted in the JVM, as a Java program.
 Clojure code can either be loaded by a running Clojure process, or
 compiled Ahead Of Time (AOT compilation) into Java bytecode. In either case,
-even simple Clojure code mid execution is a very complex Java program,
+even simple Clojure code mid-execution is a complex Java program,
 and any exceptions thrown are thrown as Java errors.
 From the viewpoint of the JVM, the entirety of the Clojure process is
 part of the users program, and so error messages include large amounts
 of data about the underlying state of the Java classes that implement Clojure.
 What information regarding the error that remains unobscured is still
 phrased as a Java error, forcing a Clojure user into learning
-the underlying Java code. This undue onus on the beginner,
-unfamiliar with programming in general is unreasonable.
+the underlying Java code. 
+\emcomment{Simplify the previous sentence}
+This undue onus on the beginner,
+unfamiliar with programming in general, is unreasonable.
 However, the large amounts of information in a Clojure error
 can be part of processing down the error for beginners.
+\emcomment{I am not sure what this means}
 
 \section{Clojure Spec}
-A second piece of the information required can be sourced from Clojure Spec \comment{cite this}
-which is a library within Clojure, dealing with runtime validation of
-the structure of data within a program. These specifications can be applied to
+A second piece of the information required can be sourced from Clojure Spec~\cite{spec}
+which is a recently added library within Clojure, dealing with runtime validation of
+the structure of data within a program. 
+\emcomment{Give an example: Spec can be used to set up runtime
+type checking for function arguments, for instance to verify that an argument used 
+as a list index is a non-negative integer.}
+These specifications, or contracts, can be applied to
  the arguments of function calls, allowing erroneous function calls to have
- error messages that explain how the invocation did not meet the usage pattern
- needed. By providing Spec specifications for the Core library of Clojure,
+customized error messages that explain how the invocation did not meet the usage pattern
+ needed \emcomment{Say: when a wrong type of argument is passed to a function - instead of the second part of the sentence}. 
+By providing Spec specifications for the Core library of Clojure,
  we can cover every function that a novice will be able to call, and thus catch
- any miscalled functions with detailed spec error messages.
+ any miscalled functions with detailed Spec error messages.
  This information can be captured by our system, and as a result
- let us access information such as the actual values that caused the errors.
-Note that Spec only provides errors for function parameters, syntax errors or
+ let us access information such as the actual values that caused the errors 
+\emcomment{which are often not included in default Clojure error messages}.
+Note that Spec only provides errors for function parameters; for syntax errors or other kinds of 
 runtime exceptions, we need to source our data from the original Java error messages.
 Between Spec error messages and the original Java error messages, we have enough
 information to leverage the tools built by the
