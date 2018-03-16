@@ -130,7 +130,7 @@ integrating beginner friendly error messages into Clojure via nREPL.
 
 \section{Introduction}
 Clojure~\cite{Hickey:2008}, amongst other functional languages, has gained attention in recent years
-in part for its management of state and concurrency. 
+in part for its management of state and concurrency.
 %\comment{is there something else I should call out as feature of Clojure?}
 %\emcomment{For this write-up it's sufficient. For a full-scale paper you would need more details}
 Running on the Java Virtual Machine (JVM), Clojure has a number of advantages for beginning students.
@@ -180,7 +180,7 @@ and can be applied to any data structure, including the arguments supplied to a 
  used as list indices are non-negative integers.
 Importantly, these contracts provide detailed information
  about how the actual values differ from those required.
-By providing Spec specifications for the Core library of Clojure,
+By providing Spec specifications for the core library of Clojure,
  we can cover every function that a novice is able to call, and thus catch
  any miscalled functions with detailed Spec error messages.
  This information can be captured by our system, and as a result
@@ -190,7 +190,7 @@ Note that Spec only provides errors for function arguments; for syntax errors or
 runtime exceptions, we need to source our data from the original Java error messages.
 Between Spec error messages and the original Java error messages, we have enough
 information to leverage the tools built by the
- University of Minnesota Morris research group~\cite{mics2017}. 
+ University of Minnesota Morris research group~\cite{mics2017}.
 However, up until now it was not clear how this system could be integrated with the larger Clojure ecosystem.
 %, as soon as we can integrate
 % our process with the larger Clojure ecosystem.
@@ -221,13 +221,13 @@ Instead, the ideal position for our code is within a module
 nREPL~\cite{nrepl} is a community standard implementation of the REPL concept,
  using a
 \newline
-Client/Server model. 
+Client/Server model.
 %It is integrated in Leiningen
 % (a project management system common in the Clojure community) as the default REPL.
 % Plugins that utilize nREPL exist for Emacs, vim, InelliJ Idea, Atom, and Eclipse,
 %among others.
 It is integrated into Clojure project management software, as well as most commonly used IDEs
-that support Clojure. 
+that support Clojure.
 nREPL works by passing messages from the client, to be executed on the server, with the results
 being returned to the client for display.
 It allows a set of middleware to modify messages, providing utilities
