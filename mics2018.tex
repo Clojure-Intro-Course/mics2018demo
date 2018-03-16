@@ -200,13 +200,14 @@ information to leverage the tools built by the
 Clojure is homoiconic, meaning that a Clojure program is also a Clojure datastructure.
  Evaluating every values in that structure is
 equivalent to running the program.
-This in part allows a Clojure process to read in data, process it as a program
-and display the results back to the programmer and awaiting the next input.
- This common pattern is referred to
-as the Read-Eval-Print-Loop (REPL), and programmers use it to test and build up
+This in part allows a Clojure process to read in data, process it as a program, display the results
+ back to the programmer, and keep running, awaiting the next input.
+ This common pattern \emcomment{sequence of steps} is referred to
+as the Read-Eval-Print-Loop (REPL). Programmers use it to interactively test and build up
 individual parts of their programs functions. This pattern of development is
 referred to as REPL-Driven and is frequently used in Clojure community.
 \comment{can I say ''practically all'' here?}
+\emcomment{I'd say "commonly" rather than "frequently" - that covers "practically all"}
  Most Clojure Integrated Development Environments (IDEs) feature REPLs for
  user convenience. Outside of developer experimentation, the REPL mechanism is also used
 by the Clojure process to load in new Clojure code for execution in a running program,
